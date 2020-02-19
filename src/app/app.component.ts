@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   emailTo: string = "sxv180026@utdallas.edu";
   emailSubject: string = "Weekly Report";
   token: string;
+  //TODO
 
   constructor(private api: ApiService) {}
 
