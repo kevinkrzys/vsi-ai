@@ -1,0 +1,6 @@
+{
+  "/api/*": {
+    "target": "http://vsiai.visualstorageintelligence.com",
+    "secure": false
+  }
+}
