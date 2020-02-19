@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   emailTo: string = "sxv180026@utdallas.edu";
   emailSubject: string = "Weekly Report";
   token: string;
-  //TODO
+  displayBlockText: string[] = [];
 
   constructor(private api: ApiService) {}
 
@@ -26,6 +26,9 @@ export class AppComponent implements OnInit {
       this.api.getAllClients(this.token).subscribe((response: JSON) => {
         this.clients = response["clientList"];
       });
+    });
+    this.api.getGenereatedText("Executive Summary").subscribe(data => {
+      this.displayBlockText.push(data);
     });
 
     this.blocks = [

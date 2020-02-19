@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root"
 })
 export class ApiService {
-  root: string = "http://vsiai.visualstorageintelligence.com";
+  vsiRoot: string = "http://vsiai.visualstorageintelligence.com";
+  nodeRoot: string = "http://localhost:4300";
 
   body = new HttpParams()
     .set("lg_username", "super@hackathon.com")
@@ -14,10 +15,14 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   getToken() {
-    return this.http.post(this.root + "/api/login", this.body);
+    return this.http.post(this.vsiRoot + "/api/login", this.body);
   }
 
   getAllClients(token: string) {
-    return this.http.get(this.root + "/api/allclients/" + token);
+    return this.http.get(this.vsiRoot + "/api/allclients/" + token);
+  }
+
+  getGenereatedText(button: string) {
+    return this.http.get(this.nodeRoot + "/generate", { responseType: "text" });
   }
 }
