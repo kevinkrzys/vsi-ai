@@ -117,5 +117,29 @@ def storage_environment_by_datacenter_overview(client_id, period_id):
     except Exception as e:
         return raiseError(BAD_REQUEST, e)
     
+@app.route('/api/v1/get_bu_provisioning_data/<client_id>/<period_id>', methods=['GET'])
+def get_bu_provisioning_data(client_id, period_id):
+    try:
+        df_business_unit = pd.read_csv(str(client_id)+"_get_bu_provisioning_data.csv", index_col=None)
+        df_temp = df_business_unit[df_business_unit['period_id']==int(period_id)]
+        df_temp = df_temp.reset_index()
+        df_temp = df_temp.drop(['index'],axis=1)
+        response = df_temp.to_dict('records')
+        return jsonify(response)
+    except Exception as e:
+        return raiseError(BAD_REQUEST, e)
+    
+@app.route('/api/v1/enterprise_virtual_center_summary/<client_id>/<period_id>', methods=['GET'])
+def enterprise_virtual_center_summary(client_id, period_id):
+    try:
+        df_enterprise_virtual_center_summary = pd.read_csv(str(client_id)+"_enterprise_virtual_center_summary.csv", index_col=None)
+        df_temp = df_enterprise_virtual_center_summary[df_enterprise_virtual_center_summary['period_id']==int(period_id)]
+        df_temp = df_temp.reset_index()
+        df_temp = df_temp.drop(['index'],axis=1)
+        response = df_temp.to_dict('records')
+        return jsonify(response)
+    except Exception as e:
+        return raiseError(BAD_REQUEST, e)
+    
 if __name__ == "__main__":
     app.run(debug=True)
