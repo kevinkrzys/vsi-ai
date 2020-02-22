@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand pr-1" href="#">
-    <img src="../assets/images/logo.png" alt="Logo" />
+    <img src="../assets/images/logo.png" alt="Logo" /> |
+    <span class="sibyl">SIBYL</span>
   </a>
   <button
     class="navbar-toggler"
@@ -15,7 +16,7 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+    <!-- <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a class="nav-link" href="#"
           >Home <span class="sr-only">(current)</span></a
@@ -46,8 +47,8 @@
       <li class="nav-item">
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
+    </ul> -->
+    <form class="form-inline my-2 my-lg-0 ml-auto">
       <input
         class="form-control mr-sm-2"
         type="search"
@@ -66,7 +67,7 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Home</a></li>
       <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Email</li>
+      <li class="breadcrumb-item active" aria-current="page">Email Client</li>
     </ol>
   </nav>
 </section>
@@ -75,7 +76,7 @@
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-4">
-        <div class="dropdown show">
+        <div class="dropdown show mb-3">
           <a
             class="btn btn-secondary dropdown-toggle"
             href="#"
@@ -85,7 +86,7 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            {{ selectedClient }}
+            {{ selectedClient.name }}
           </a>
 
           <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -94,10 +95,18 @@
               href="#"
               *ngFor="let client of clients"
               (click)="setClient(client)"
+              [class.disabled]="
+                client.name != 'High Flying Healthcare' &&
+                client.name != 'Works Comp'
+              "
               >{{ client.name }}</a
             >
           </div>
         </div>
+        <button class="btn btn-success" (click)="sendEmail()">
+          Send
+          <i class="fas fa-paper-plane"></i>
+        </button>
       </div>
 
       <div class="col-lg-8">
@@ -124,7 +133,7 @@
               <input
                 type="text"
                 class="form-control"
-                value="{{ emailTo }}"
+                value="{{ setClientEmail(selectedClient.name) }}"
                 aria-describedby="basic-addon1"
               />
             </div>
@@ -150,22 +159,33 @@
   </div>
 </section>
 
-<section>
+<section *ngIf="selectedClient.name != 'Select a client'">
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-6 border border-dark p-3">
-        <button
-          type="button"
-          class="btn btn-light mb-3 mr-3"
-          *ngFor="let block of blocks"
-          (click)="add(block)"
-          [class.selected]="displayBlocks.includes(block)"
-        >
-          {{ block }}
-        </button>
+        <span *ngFor="let block of blocks" class="position-relative">
+          <button
+            type="button"
+            class="btn btn-light mb-4 mr-4 btn-outline-dark"
+            (click)="add(block)"
+            [class.selected]="displayBlockOrder[block]"
+          >
+            {{ block }}
+          </button>
+          <span
+            id="remove"
+            *ngIf="displayBlockOrder[block]"
+            (click)="remove(block)"
+            >Remove</span
+          >
+        </span>
       </div>
-      <div class="col-lg-6 border border-dark p-3">
-        {{ displayBlockText[0] }}
+      <div class="col-lg-6 border border-dark p-0" id="email">
+        <ejs-richtexteditor
+          [value]="displayBlockText"
+          [toolbarSettings]="tools"
+          [fontColor]="fontColor"
+        ></ejs-richtexteditor>
       </div>
     </div>
   </div>

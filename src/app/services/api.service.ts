@@ -23,6 +23,18 @@ export class ApiService {
   }
 
   getGenereatedText(button: string) {
-    return this.http.get(this.nodeRoot + "/generate", { responseType: "text" });
+    return this.http.get(this.nodeRoot + "/generatedText", {
+      responseType: "text"
+    });
+  }
+
+  generateNLG(client, block) {
+    return this.http.get(this.nodeRoot + "/generateNLG", {
+      params: {
+        client: client,
+        block: block
+      },
+      responseType: "text"
+    });
   }
 }

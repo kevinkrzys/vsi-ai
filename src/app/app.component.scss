@@ -6,7 +6,34 @@
   width: 100%;
 }
 
+.sibyl {
+  color: #303365;
+  font-weight: 700;
+}
+
 .selected {
-  background-color: green;
+  background-color: #3fb83d;
   color: white;
+}
+
+#email {
+  overflow-y: auto;
+}
+
+#richtexteditor_1822616568_0_rte-edit-view {
+  height: 300px;
+}
+
+#remove {
+  color: red;
+  font-size: 10px;
+  position: absolute;
+  left: 5px;
+  top: 20px;
+  cursor: pointer;
+}
+
+.disabled {
+  cursor: no-drop;
+  background-color: #eee;
 }
