@@ -25,9 +25,10 @@ app.listen(port, () => {
 
 app.get('/generateNLG', (req, res) => {
     let block = getBlock(req.query.block);
+    let data = JSON.parse(req.query.data);
     let response = rosaenlgPug.renderFile(block, {
         language: 'en_US',
-        client: JSON.parse(req.query.client)
+        data: data
     })
     res.send(response);
 });
@@ -57,6 +58,9 @@ getBlock = function (block) {
 
         case "Provisioning Summary":
             return "pro-summary.pug";
+
+        case "VMware Summary":
+            return "vmsummary.pug";
 
         case "Conclusion":
             return "conclusion.pug";

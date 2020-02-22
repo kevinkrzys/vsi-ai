@@ -1,7 +1,14 @@
+| Storage by DC:
 mixin storage
-    | Storage by DC:
+    | #{array.device_type_description}:
     ul(style='list-style-type:circle')
-        li name1 a PB x% used
-        li name2 b PB y% used
-        li name3 c PB z% used
-p #[+storage]
+        li Total allocation of #{array.ttl_allocated}%
+        li Total iops of #{array.ttl_iops} ms
+        li Total latency of #{array.ttl_latency} ms
+        li Total usable space of #{array.ttl_latency} PB
+        li Total used space of #{array.ttl_used} PB
+
+-let array;
+each dc in data
+    - array = dc;
+    p #[+storage]

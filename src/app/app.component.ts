@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   isClicked: boolean = false;
   displayBlocks: string[] = [];
   emailFrom: string = "gauty95@gmail.com";
-  emailTo: string = "sxv180026@utdallas.edu";
+  emailTo: string = "";
   emailSubject: string = "Weekly Report";
   token: string;
   displayBlockOrder: {} = {};
@@ -53,29 +53,21 @@ export class AppComponent implements OnInit {
   fontColor = {
     modeSwitcher: true
   };
+  showPredict: boolean = false;
+  pid: {}[] = [];
+  selectedPid: {} = {};
 
   constructor(private api: ApiService) {}
 
   ngOnInit() {
     this.selectedClient.name = "Select a client";
+    this.selectedPid["title"] = "Select a period";
     this.api.getToken().subscribe((response: JSON) => {
       this.token = response["user"]["token"];
       this.api.getAllClients(this.token).subscribe((response: JSON) => {
         this.clients = response["clientList"];
       });
     });
-    this.blocks = [
-      "Introduction",
-      "Enterprise Summary",
-      "Storage by DC",
-      "Trends - Capacity",
-      "Trends - Performance",
-      "Host Summary",
-      "Pool Alerts",
-      "Provisioning Summary",
-      "Conclusion",
-      "Signature"
-    ];
   }
 
   setClient(client) {
@@ -88,6 +80,48 @@ export class AppComponent implements OnInit {
       this.displayBlockText = "";
       this.displayBlocks = [];
     }
+    if (client.name == "High Flying Healthcare") {
+      this.blocks = [
+        "Introduction",
+        "Enterprise Summary",
+        "Storage by DC",
+        "Trends - Capacity",
+        "Trends - Performance",
+        "Host Summary",
+        "VMware Summary",
+        "Pool Alerts",
+        "Provisioning Summary",
+        "Conclusion",
+        "Signature"
+      ];
+      this.pid = [
+        { title: "01-20-2020", id: "1846", client: 188 },
+        { title: "01-18-2020", id: "1844", client: 188 },
+        { title: "01-15-2020", id: "1841", client: 188 },
+        { title: "01-13-2020", id: "1839", client: 188 },
+        { title: "01-11-2020", id: "1837", client: 188 }
+      ];
+    } else if (client.name == "Works Comp") {
+      this.blocks = [
+        "Introduction",
+        "Enterprise Summary",
+        "Storage by DC",
+        "Trends - Capacity",
+        "Trends - Performance",
+        "Host Summary",
+        "Pool Alerts",
+        "Provisioning Summary",
+        "Conclusion",
+        "Signature"
+      ];
+      this.pid = [
+        { title: "01-19-2020", id: "1845", client: 137 },
+        { title: "01-16-2020", id: "1842", client: 137 },
+        { title: "01-14-2020", id: "1840", client: 137 },
+        { title: "01-12-2020", id: "1838", client: 137 },
+        { title: "01-09-2020", id: "1835", client: 137 }
+      ];
+    }
   }
 
   add(block) {
@@ -96,12 +130,74 @@ export class AppComponent implements OnInit {
     } else {
       this.displayBlocks.splice(this.displayBlocks.indexOf(block), 1);
     }
-    this.api
-      .generateNLG(JSON.stringify(this.selectedClient), block)
-      .subscribe(response => {
-        this.displayBlockOrder[block] = response;
-        this.regenerateEmail();
-      });
+    switch (block) {
+      case "Enterprise Summary":
+        this.api
+          .enterpriseSummary(
+            this.selectedClient["clientid"],
+            this.selectedPid["id"]
+          )
+          .subscribe(response => {
+            this.api
+              .generateNLG(JSON.stringify(response), block)
+              .subscribe(res => {
+                this.displayBlockOrder[block] = res;
+                this.regenerateEmail();
+              });
+          });
+        break;
+
+      case "Storage by DC":
+        this.api
+          .storageByDC(this.selectedClient["clientid"], this.selectedPid["id"])
+          .subscribe(response => {
+            this.api
+              .generateNLG(JSON.stringify(response), block)
+              .subscribe(res => {
+                this.displayBlockOrder[block] = res;
+                this.regenerateEmail();
+              });
+          });
+        break;
+
+      case "VMware Summary":
+        this.api
+          .vmwareSummary(
+            this.selectedClient["clientid"],
+            this.selectedPid["id"]
+          )
+          .subscribe(response => {
+            this.api
+              .generateNLG(JSON.stringify(response[0]), block)
+              .subscribe(res => {
+                this.displayBlockOrder[block] = res;
+                this.regenerateEmail();
+              });
+          });
+        break;
+
+      case "Provisioning Summary":
+        this.api
+          .proSummary(this.selectedClient["clientid"], this.selectedPid["id"])
+          .subscribe(response => {
+            this.api
+              .generateNLG(JSON.stringify(response), block)
+              .subscribe(res => {
+                this.displayBlockOrder[block] = res;
+                this.regenerateEmail();
+              });
+          });
+        break;
+
+      default:
+        this.api
+          .generateNLG(JSON.stringify(this.selectedClient), block)
+          .subscribe(res => {
+            this.displayBlockOrder[block] = res;
+            this.regenerateEmail();
+          });
+        break;
+    }
   }
 
   setClientEmail(clientName: string) {
@@ -151,14 +247,28 @@ export class AppComponent implements OnInit {
   }
 
   sendEmail() {
-    debugger;
     this.api
       .sendEmail(this.emailTo, this.emailSubject, this.displayBlockText)
       .subscribe((result: JSON) => {
-        debugger;
         if (result["status"] == "success") {
+          this.reset();
           alert("Email Sent Successfully");
         }
       });
+  }
+
+  predict() {
+    alert("Coming Soon!");
+  }
+
+  setPid(id: string) {
+    this.selectedPid = id;
+  }
+
+  reset() {
+    this.selectedClient = {};
+    this.selectedClient.name = "Select a client";
+    this.selectedPid["title"] = "Select a period";
+    this.displayBlockOrder = {};
   }
 }

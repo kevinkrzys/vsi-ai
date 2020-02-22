@@ -1,53 +1,26 @@
 <nav class="navbar navbar-expand-lg navbar-light mb-3">
-  <a class="navbar-brand pr-1" href="#">
-    <img src="../assets/images/logo.png" alt="Logo" /> |
-    <span class="sibyl">SIBYL</span>
-  </a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  <div class="col-lg-6 pl-0">
+    <a class="navbar-brand pr-1" href="#">
+      <img src="../assets/images/logo.png" alt="Logo" /> |
+      <span class="sibyl" (click)="showPredict = !showPredict">SIBYL</span>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <!-- <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#"
-          >Home <span class="sr-only">(current)</span></a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle"
-          href="#"
-          id="navbarDropdown"
-          role="button"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
-    </ul> -->
+  <div
+    class="collapse navbar-collapse col-lg-6 pr-0"
+    id="navbarSupportedContent"
+  >
     <form class="form-inline my-2 my-lg-0 ml-auto">
       <input
         class="form-control mr-sm-2"
@@ -66,34 +39,64 @@
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-4">
-        <div class="dropdown show mb-3">
-          <a
-            class="btn btn-secondary dropdown-toggle"
-            href="#"
-            role="button"
-            id="dropdownMenuLink"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            {{ selectedClient.name }}
-          </a>
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="dropdown show mb-3">
+              <a
+                class="btn btn-secondary dropdown-toggle"
+                href="#"
+                role="button"
+                id="dropdownMenuLink"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {{ selectedClient.name }}
+              </a>
 
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a
-              class="dropdown-item"
-              href="#"
-              *ngFor="let client of clients"
-              (click)="setClient(client)"
-              [class.disabled]="
-                client.name != 'High Flying Healthcare' &&
-                client.name != 'Works Comp'
-              "
-              >{{ client.name }}</a
-            >
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  *ngFor="let client of clients"
+                  (click)="setClient(client)"
+                  [class.disabled]="
+                    client.name != 'High Flying Healthcare' &&
+                    client.name != 'Works Comp'
+                  "
+                  >{{ client.name }}</a
+                >
+              </div>
+            </div>
+            <div class="dropdown show mb-3 ml-3">
+              <a
+                class="btn btn-secondary dropdown-toggle"
+                href="#"
+                role="button"
+                id="pid"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {{ selectedPid.title }}
+              </a>
+
+              <div class="dropdown-menu" aria-labelledby="pid">
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  *ngFor="let id of pid"
+                  (click)="setPid(id)"
+                  >{{ id.title }}</a
+                >
+              </div>
+            </div>
           </div>
         </div>
-        <button class="btn btn-success" (click)="sendEmail()">
+        <button
+          class="btn btn-outline-success my-2 my-sm-0"
+          (click)="sendEmail()"
+        >
           Send
           <i class="fas fa-paper-plane"></i>
         </button>
@@ -146,6 +149,44 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mb-3" *ngIf="showPredict">
+  <div class="col-lg-12">
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">From:</span>
+          </div>
+          <input
+            class="form-control"
+            type="date"
+            value="2011-08-19"
+            id="example-date-input"
+          />
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">To:</span>
+          </div>
+          <input
+            class="form-control"
+            type="date"
+            value="2011-08-19"
+            id="example-date-input"
+          />
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <button class="btn btn-primary w-100" (click)="predict()">
+          Predict
+        </button>
       </div>
     </div>
   </div>

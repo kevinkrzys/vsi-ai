@@ -1,7 +1,9 @@
-mixin provisioning
-    | Provisioning Summary:
+| Provisioning Summary:
+mixin pro
     ul(style='list-style-type:circle')
-        li Provisioning Summary 1
-        li Provisioning Summary 2
-        li Provisioning Summary 3
-p #[+provisioning]
+    li Array #{array.array_name} from #{array.application} had a capacity of #{array.percent_capacity}% with performance of #{array.percent_performance}% and is #{array.alert_color}
+
+-let array;
+each dc in data
+    - array = dc;
+    p #[+pro]

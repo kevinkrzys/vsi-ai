@@ -6,8 +6,9 @@ mixin summary
     br
     |  
     ul(style='list-style-type:circle')
-        li flash storage
-        li a% storage used
-        li b% storage allocated
-        li c TB orphaned
+        li IOPS was #{data.iops}
+        li Latency was #{data.latency}
+        li #{data.orphan_gb} GB orphaned space
+        li #{data.orphan_luns} LUNS were orphaned
+        li #{data.percent_used}% was used
 p #[+summary]

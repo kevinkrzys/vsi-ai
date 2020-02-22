@@ -1,0 +1,7 @@
+| VMware Summary:
+mixin summary
+    ul(style='list-style-type:circle')
+    li #{data.total_data_centers} VCentre environments analyzed
+    li There are a total of #{data.total_vms} VMs out of which #{data.total_active_vms} are active and a total of #{data.total_clusters} clusters
+
+p #[+summary]

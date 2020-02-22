@@ -1,11 +1,11 @@
 mixin performance
     | Performance:
     ul(style='list-style-type:circle')
-        if client.name=="High Flying Healthcare"
+        if data.name=="High Flying Healthcare"
             li AHISSVC
             li pool performance review - (weekly latency report)
             li simple trend analysis
             li latency by pool
-        else
+        else if data.name == "Works Comp"
             li vmax performance
 p #[+performance]
