@@ -54,30 +54,29 @@ def sendEmail():
     except Exception as e:
         return raiseError(BAD_REQUEST, e)
 
-@app.route('/api/v1/enterprise_summary/<clientid>/<period_id>', methods=['GET'])
+@app.route('/api/v1/enterprise_summary/<client_id>/<period_id>', methods=['GET'])
 def enterprise_summary(client_id, period_id):
     try:
         df_storage_1 = pd.read_csv(str(client_id)+"_enterprise_summary.csv", index_col=None)
-        df_temp = df_storage_1[df_storage_1['period_id']==period_id]
+        df_temp = df_storage_1[df_storage_1['period_id']==int(period_id)]
         df_temp = df_temp.reset_index()
         df_temp = df_temp.drop(['index'],axis=1)
-        response = jsonify({ "raw_disk_gb":df_temp["raw_disk_gb"].sum(),
-            "total_allocated":df_temp["raw_disk_gb"].sum(),
-            "total_free":df_temp["total_free"].sum(),
-            "total_used":df_temp["total_used"].sum(),
-            "usable_gb":df_temp["usable_gb"].sum(),
-            "percent_used":df_temp["percent_used"].mean(),
-            "provisioned_gb":df_temp["provisioned_gb"].sum(),
-            "orphan_gb":df_temp["orphan_gb"].sum(),
-            "orphan_luns":df_temp["num_orphans"].sum(),
-            "num_hosts":df_temp["num_hosts"].sum(),
-            "pools":df_temp["num_disk_groups"].sum(),
-            "savings":df_temp["dedupe_gb"].sum(),
-            "num_drives":df_temp["num_drives"].sum(),
-            "iops":df_temp["iops"].sum(),
-            "latency":df_temp["latency"].mean(),
-            "volume_locked_free":df_temp["volume_locked_free"].sum()
-           })
+        response = { "raw_disk_gb":int(df_temp["raw_disk_gb"].sum()),
+                    "total_allocated":int(df_temp["raw_disk_gb"].sum()),
+                    "total_free":int(df_temp["total_free"].sum()),
+                    "total_used":int(df_temp["total_used"].sum()),
+                    "usable_gb":int(df_temp["usable_gb"].sum()),
+                    "percent_used":int(df_temp["percent_used"].mean()),
+                    "provisioned_gb":int(df_temp["provisioned_gb"].sum()),
+                    "orphan_gb":int(df_temp["orphan_gb"].sum()),
+                    "orphan_luns":int(df_temp["num_orphans"].sum()),
+                    "num_hosts":int(df_temp["num_hosts"].sum()),
+                    "pools":int(df_temp["num_disk_groups"].sum()),
+                    "savings":int(df_temp["dedupe_gb"].sum()),
+                    "num_drives":int(df_temp["num_drives"].sum()),
+                    "iops":int(df_temp["iops"].sum()),
+                    "latency":int(df_temp["latency"].mean()),
+                    "volume_locked_free":int(df_temp["volume_locked_free"].sum())}
         return response
     except Exception as e:
         return raiseError(BAD_REQUEST, e)
