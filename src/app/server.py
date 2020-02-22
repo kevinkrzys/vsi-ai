@@ -141,5 +141,41 @@ def enterprise_virtual_center_summary(client_id, period_id):
     except Exception as e:
         return raiseError(BAD_REQUEST, e)
     
+@app.route('/api/v1/enterprise_trend/<client_id>', methods=['GET'])
+def enterprise_trend(client_id):
+    try:
+        df_enterprise_trend = pd.read_csv(str(client_id)+"_enterprise_trend.csv", index_col=None)
+        df_temp = df_enterprise_trend
+        df_temp = df_temp.reset_index()
+        df_temp = df_temp.drop(['index'],axis=1)
+        response = df_temp.to_dict('records')
+        return jsonify(response)
+    except Exception as e:
+        return raiseError(BAD_REQUEST, e)
+
+@app.route('/api/v1/enterprise_trend_all_classifications/<client_id>', methods=['GET'])
+def enterprise_trend_all_classifications(client_id):
+    try:
+        df_enterprise_trend_all_classifications = pd.read_csv(str(client_id)+"_enterprise_trend_all_classifications.csv", index_col=None)
+        df_temp = df_enterprise_trend_all_classifications
+        df_temp = df_temp.reset_index()
+        df_temp = df_temp.drop(['index'],axis=1)
+        response = df_temp.to_dict('records')
+        return jsonify(response)
+    except Exception as e:
+        return raiseError(BAD_REQUEST, e)
+    
+@app.route('/api/v1/enterprise_performance_iops_trend/<client_id>', methods=['GET'])
+def enterprise_performance_iops_trend(client_id):
+    try:
+        df_enterprise_performance_iops_trend = pd.read_csv(str(client_id)+"_enterprise_performance_iops_trend.csv", index_col=None)
+        df_temp = df_enterprise_performance_iops_trend
+        df_temp = df_temp.reset_index()
+        df_temp = df_temp.drop(['index'],axis=1)
+        response = df_temp.to_dict('records')
+        return jsonify(response)
+    except Exception as e:
+        return raiseError(BAD_REQUEST, e)
+    
 if __name__ == "__main__":
     app.run(debug=True)
