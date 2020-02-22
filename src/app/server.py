@@ -54,25 +54,31 @@ def sendEmail():
     except Exception as e:
         return raiseError(BAD_REQUEST, e)
 
-@app.route('/api/v1/sendEmail', methods=['POST'])
-def sendEmail():
+@app.route('/api/v1/enterprise_summary/<clientid>/<period_id>', methods=['GET'])
+def enterprise_summary(client_id, period_id):
     try:
-        data = request.json
-        # Create the email object
-        msg = MIMEMultipart()
-        msg['From'] = param["email_from"]
-        msg['To'] = data["email_to"]
-        msg['Subject'] = data["email_subject"]
-        msg.attach(MIMEText(data["email_body"], 'html'))
-        # Initiate email server and login with the credentials
-        smtp_server = smtplib.SMTP(param["host"], 587)
-        smtp_server.ehlo()
-        smtp_server.starttls()
-        smtp_server.login(param["email_from"], param["email_password"])
-        text = msg.as_string()
-        smtp_server.sendmail(param["email_from"], data["email_to"], text)
-        smtp_server.quit()
-        return jsonify({'status': 'success', 'results': 'OK'}) 
+        df_storage_1 = pd.read_csv(str(client_id)+"_enterprise_summary.csv", index_col=None)
+        df_temp = df_storage_1[df_storage_1['period_id']==period_id]
+        df_temp = df_temp.reset_index()
+        df_temp = df_temp.drop(['index'],axis=1)
+        response = jsonify({ "raw_disk_gb":df_temp["raw_disk_gb"].sum(),
+            "total_allocated":df_temp["raw_disk_gb"].sum(),
+            "total_free":df_temp["total_free"].sum(),
+            "total_used":df_temp["total_used"].sum(),
+            "usable_gb":df_temp["usable_gb"].sum(),
+            "percent_used":df_temp["percent_used"].mean(),
+            "provisioned_gb":df_temp["provisioned_gb"].sum(),
+            "orphan_gb":df_temp["orphan_gb"].sum(),
+            "orphan_luns":df_temp["num_orphans"].sum(),
+            "num_hosts":df_temp["num_hosts"].sum(),
+            "pools":df_temp["num_disk_groups"].sum(),
+            "savings":df_temp["dedupe_gb"].sum(),
+            "num_drives":df_temp["num_drives"].sum(),
+            "iops":df_temp["iops"].sum(),
+            "latency":df_temp["latency"].mean(),
+            "volume_locked_free":df_temp["volume_locked_free"].sum()
+           })
+        return response
     except Exception as e:
         return raiseError(BAD_REQUEST, e)
 
