@@ -54,5 +54,27 @@ def sendEmail():
     except Exception as e:
         return raiseError(BAD_REQUEST, e)
 
+@app.route('/api/v1/sendEmail', methods=['POST'])
+def sendEmail():
+    try:
+        data = request.json
+        # Create the email object
+        msg = MIMEMultipart()
+        msg['From'] = param["email_from"]
+        msg['To'] = data["email_to"]
+        msg['Subject'] = data["email_subject"]
+        msg.attach(MIMEText(data["email_body"], 'html'))
+        # Initiate email server and login with the credentials
+        smtp_server = smtplib.SMTP(param["host"], 587)
+        smtp_server.ehlo()
+        smtp_server.starttls()
+        smtp_server.login(param["email_from"], param["email_password"])
+        text = msg.as_string()
+        smtp_server.sendmail(param["email_from"], data["email_to"], text)
+        smtp_server.quit()
+        return jsonify({'status': 'success', 'results': 'OK'}) 
+    except Exception as e:
+        return raiseError(BAD_REQUEST, e)
+
 if __name__ == "__main__":
     app.run(debug=True)
