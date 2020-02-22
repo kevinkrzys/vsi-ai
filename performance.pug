@@ -1,7 +1,11 @@
 mixin performance
     | Performance:
     ul(style='list-style-type:circle')
-        li performance summary 1
-        li performance summary 2
-        li performance summary 3
+        if client.name=="High Flying Healthcare"
+            li AHISSVC
+            li pool performance review - (weekly latency report)
+            li simple trend analysis
+            li latency by pool
+        else
+            li vmax performance
 p #[+performance]

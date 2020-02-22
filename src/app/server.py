@@ -1,5 +1,5 @@
 import flask
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask import jsonify, make_response, current_app, request
 from datetime import timedelta
 from functools import update_wrapper
@@ -10,11 +10,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from config import *
+from datetime import timedelta
+from flask import make_response, request, current_app
+from functools import update_wrapper
 
 app = flask.Flask(__name__)
-origin = '*'
-CORS(app)
-
+CORS(app, resources=r'/api/v1/*', headers='Content-Type')
 
 MISSING_PARAMETER = 400
 BAD_REQUEST = 400
@@ -24,7 +25,6 @@ SERVER_FAILED = 500
 NOT_FOUND = 404
 PRE_CONDITION_FAILED = 412
 EVOLVE_ONLY = 0
-
 
 def raiseError(code, message):
     resp = jsonify({'message': message})
@@ -55,5 +55,4 @@ def sendEmail():
         return raiseError(BAD_REQUEST, e)
 
 if __name__ == "__main__":
-    app.run(debug=True,host="0.0.0.0", port=9055)
-    # app.run(host="0.0.0.0", port=9055)
+    app.run(debug=True)

@@ -21,7 +21,7 @@
 }
 
 #richtexteditor_1822616568_0_rte-edit-view {
-  height: 300px;
+  height: 350px;
 }
 
 #remove {
@@ -36,4 +36,8 @@
 .disabled {
   cursor: no-drop;
   background-color: #eee;
+}
+
+.dropdown > .dropdown-menu {
+  padding: 0;
 }

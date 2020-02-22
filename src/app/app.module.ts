@@ -5,6 +5,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { RichTextEditorAllModule } from "@syncfusion/ej2-angular-richtexteditor";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [AppComponent],
@@ -12,7 +13,8 @@ import { RichTextEditorAllModule } from "@syncfusion/ej2-angular-richtexteditor"
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    RichTextEditorAllModule
+    RichTextEditorAllModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

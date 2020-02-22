@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   blocks: string[] = [];
   isClicked: boolean = false;
   displayBlocks: string[] = [];
-  emailFrom: string = "vsymons@cleartechnologies.net";
+  emailFrom: string = "gauty95@gmail.com";
   emailTo: string = "sxv180026@utdallas.edu";
   emailSubject: string = "Weekly Report";
   token: string;
@@ -79,7 +79,6 @@ export class AppComponent implements OnInit {
   }
 
   setClient(client) {
-    debugger;
     if (
       (client.name == "High Flying Healthcare" ||
         client.name == "Works Comp") &&
@@ -139,12 +138,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  sendEmail() {
-    alert("Email Sent!");
-  }
-
   remove(block) {
-    debugger;
     this.displayBlockOrder[block] = "";
     this.regenerateEmail();
   }
@@ -154,5 +148,17 @@ export class AppComponent implements OnInit {
     for (var key of Object.keys(this.displayBlockOrder)) {
       this.displayBlockText += this.displayBlockOrder[key];
     }
+  }
+
+  sendEmail() {
+    debugger;
+    this.api
+      .sendEmail(this.emailTo, this.emailSubject, this.displayBlockText)
+      .subscribe((result: JSON) => {
+        debugger;
+        if (result["status"] == "success") {
+          alert("Email Sent Successfully");
+        }
+      });
   }
 }
