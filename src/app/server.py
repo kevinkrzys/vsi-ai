@@ -61,7 +61,7 @@ def enterprise_summary(client_id, period_id):
         df_temp = df_storage_1[df_storage_1['period_id']==int(period_id)]
         df_temp = df_temp.reset_index()
         df_temp = df_temp.drop(['index'],axis=1)
-        response = { "raw_disk_gb":int(df_temp["raw_disk_gb"].sum()),
+        response = {"raw_disk_gb":int(df_temp["raw_disk_gb"].sum()),
                     "total_allocated":int(df_temp["raw_disk_gb"].sum()),
                     "total_free":int(df_temp["total_free"].sum()),
                     "total_used":int(df_temp["total_used"].sum()),
@@ -80,6 +80,42 @@ def enterprise_summary(client_id, period_id):
         return response
     except Exception as e:
         return raiseError(BAD_REQUEST, e)
-
+    
+@app.route('/api/v1/storage_environment_by_datacenter_grouping/<client_id>/<period_id>', methods=['GET'])
+def storage_environment_by_datacenter_grouping(client_id, period_id):
+    try:
+        df_storage_2 = pd.read_csv(str(client_id)+"_storage_environment_by_datacenter_grouping.csv", index_col=None)
+        df_temp = df_storage_2[df_storage_2['period_id']==int(period_id)]
+        df_temp = df_temp.reset_index()
+        df_temp = df_temp.drop(['index'],axis=1)
+        response = df_temp.to_dict('records')
+        return jsonify(response)
+    except Exception as e:
+        return raiseError(BAD_REQUEST, e)
+    
+@app.route('/api/v1/storage_environment_by_datacenter_metagrouping/<client_id>/<period_id>', methods=['GET'])
+def storage_environment_by_datacenter_metagrouping(client_id, period_id):
+    try:
+        df_storage_3 = pd.read_csv(str(client_id)+"_storage_environment_by_datacenter_metagrouping.csv", index_col=None)
+        df_temp = df_storage_3[df_storage_3['period_id']==int(period_id)]
+        df_temp = df_temp.reset_index()
+        df_temp = df_temp.drop(['index'],axis=1)
+        response = df_temp.to_dict('records')
+        return jsonify(response)
+    except Exception as e:
+        return raiseError(BAD_REQUEST, e)
+    
+@app.route('/api/v1/storage_environment_by_datacenter_overview/<client_id>/<period_id>', methods=['GET'])
+def storage_environment_by_datacenter_overview(client_id, period_id):
+    try:
+        df_storage_4 = pd.read_csv(str(client_id)+"_storage_environment_by_datacenter_overview.csv", index_col=None)
+        df_temp = df_storage_4[df_storage_4['period_id']==int(period_id)]
+        df_temp = df_temp.reset_index()
+        df_temp = df_temp.drop(['index'],axis=1)
+        response = df_temp.to_dict('records')
+        return jsonify(response)
+    except Exception as e:
+        return raiseError(BAD_REQUEST, e)
+    
 if __name__ == "__main__":
     app.run(debug=True)
