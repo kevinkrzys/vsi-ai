@@ -30,6 +30,7 @@ app.get('/generateNLG', (req, res) => {
         language: 'en_US',
         data: data
     })
+    console.log(req.query.block);
     res.send(response);
 });
 
