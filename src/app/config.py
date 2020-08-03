@@ -1,5 +1,5 @@
 param = {
-    "email_from" : "gauty95@gmail.com",
-    "email_password" : "fuckedup12345#",
+    "email_from" : "",
+    "email_password" : "",
     "host" : "smtp.gmail.com"
     }
